@@ -6,7 +6,7 @@ import scipy.sparse as sp
 
 
 class GraphCNN(nn.Module):
-    def __init__(self,num_stock, d_market,d_news,out_c,d_hidden , hidn_rnn , hid_c, dropout ,alpha=0.2,alpha1=0.0054,t_mix=1):##alpha1 denotes the normalized threshold
+    def __init__(self,num_stock, d_market,d_news,out_c,d_hidden , hidn_rnn , hid_c, dropout ,alpha=0.2,alpha1=0.0054,t_mix=1,n_layeres=2,n_heads=1):##alpha1 denotes the normalized threshold
         super(GraphCNN, self).__init__()
         self.t_mix=t_mix
         self.dropout=dropout
@@ -26,7 +26,6 @@ class GraphCNN(nn.Module):
         self.gcs=SMPLayer(hidn_rnn, hid_c,5,3,n_layers=1,dropout=0.2,hgt_layer=1)
         self.attentions = Graph_Attention(hidn_rnn, hid_c, dropout=dropout, alpha=alpha,alpha1=alpha1, residual=True, concat=True)
         self.X2Os = Graph_Linear(num_stock, hidn_rnn+hid_c , out_c, bias = True)
-        self.executives = executives(hidn_rnn)
         self.reset_parameters()
 
     def reset_parameters(self):
